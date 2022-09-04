@@ -1002,6 +1002,16 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
                                 val = 0
                             pwm_status.append(
                                 dict(index_id=index, pwm_value=val, auto_startup=startup, auto_shutdown=shutdown))
+                 if output['output_type'] == 'emc':
+                    for pwm in self.pwm_instances:
+                        if pin in pwm:
+                            if 'duty_cycle' in pwm:
+                                pwm_val = pwm['duty_cycle']
+                                val = self.to_int(pwm_val)
+                            else:
+                                val = 0
+                            pwm_status.append(
+                                dict(index_id=index, pwm_value=val, auto_startup=startup, auto_shutdown=shutdown))
             self._plugin_manager.send_plugin_message(self._identifier,
                                                      dict(rpi_output_regular=regular_status, rpi_output_pwm=pwm_status,
                                                           rpi_output_neopixel=neopixel_status,
