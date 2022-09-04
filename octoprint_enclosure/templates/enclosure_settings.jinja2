@@ -365,7 +365,7 @@
     <!-- /ko -->
 
 
-    <!-- ko if: ($data.output_type() == "temperature_alarm" || $data.output_type() == "temp_hum_control" || ($data.output_type() == "pwm" && $data.pwm_temperature_linked()) || ($data.output_type() == "emc" && $data.emc_temperature_linked()))  -->
+    <!-- ko if: ($data.output_type() == "temperature_alarm" || $data.output_type() == "temp_hum_control" || ($data.output_type() == "pwm" && $data.pwm_temperature_linked()) || $data.output_type() == "emc")  -->
     <!-- ko if: ($data.temp_ctr_type() == "heater" || $data.temp_ctr_type() == "cooler" || ($data.output_type() == "pwm" && $data.pwm_temperature_linked()))  -->
     <div class="control-group">
       <label class="control-label">Temperature Sensor</label>
