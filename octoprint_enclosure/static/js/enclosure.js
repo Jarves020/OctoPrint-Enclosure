@@ -182,6 +182,7 @@ $(function () {
           if (linked_temp_sensor){
             linked_temp_sensor.temp_sensor_temp(sensor_data['temperature'])
             linked_temp_sensor.temp_sensor_humidity(sensor_data['humidity'])
+            linked_temp_sensor.temp_sensor_rpm(sensor_data['fanspeed'])
           }
         })
       }
