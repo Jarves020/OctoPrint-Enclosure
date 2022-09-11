@@ -197,11 +197,20 @@
 <h4>
     <span data-bind="html: label"> </span>
     <span class="badge">pwm</span>
+	<!-- ko if: ($data.pwm_temperature_linked())  -->
+	<span class="badge">temperature control</span>
+	<!-- /ko -->
 </h4>
 <div class="input-append">
     <input type="text" class="input-mini" data-bind="value: new_duty_cycle, valueUpdate: 'input', attr: {placeholder:$root.getDutyCycle(duty_cycle())}">
     <!-- ko ifnot: ($data.pwm_temperature_linked())  -->
+	<!-- ko if: ($data.output_type() == "pwm")  -->
     <button class="btn btn-input-inc" title="Set PWM" data-bind="enable: $root.isUser(), click: $root.handlePWM">
+        <i class="fa fa-check"></i>
+    </button>
+	<!-- /ko -->
+	<!-- ko if: ($data.output_type() == "emc")  -->
+    <button class="btn btn-input-inc" title="Set PWM" data-bind="enable: $root.isUser(), click: $root.handleEMC">
         <i class="fa fa-check"></i>
     </button>
     <!-- /ko -->

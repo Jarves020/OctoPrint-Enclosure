@@ -633,6 +633,34 @@ $(function () {
       }
     };
 
+    self.handleEMC = function (item) {
+      var pwm_value = item.new_duty_cycle();
+
+      pwm_value = parseInt(pwm_value);
+
+      if (pwm_value < 0 || pwm_value > 100 || isNaN(pwm_value)) {
+        item.new_duty_cycle("")
+        new PNotify({
+          title: "Enclosure",
+          text: "Duty Cycle value needs to be between 0 and 100!",
+          type: "error"
+        });
+      } else {
+        var request = { duty_cycle: pwm_value };
+        $.ajax({
+          type: "PATCH",
+          dataType: "json",
+          data: request,
+          url: self.buildPluginUrl("/emc/" + item.index_id()),
+          success: function (data) {
+            item.new_duty_cycle("");
+            item.duty_cycle(pwm_value);
+            self.getUpdateUI();
+          }
+        });
+      }
+    };
+
     self.handleNeopixel = function (item) {
 
       var index = item.index_id() ;
