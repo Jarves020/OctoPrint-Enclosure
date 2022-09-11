@@ -182,7 +182,7 @@ $(function () {
           if (linked_temp_sensor){
             linked_temp_sensor.temp_sensor_temp(sensor_data['temperature'])
             linked_temp_sensor.temp_sensor_humidity(sensor_data['humidity'])
-            linked_temp_sensor.temp_sensor_rpm(sensor_data['fanspeed'])
+            //linked_temp_sensor.temp_sensor_rpm(sensor_data['fanspeed'])
           }
         })
       }
@@ -479,7 +479,7 @@ $(function () {
         temp_sensor_address: ko.observable(""),
         temp_sensor_temp: ko.observable(""),
         temp_sensor_humidity: ko.observable(""),
-        temp_sensor_rpm: ko.observable(""),
+        //temp_sensor_rpm: ko.observable(""),
         ds18b20_serial: ko.observable(""),
         use_fahrenheit: ko.observable(false),
         action_type: ko.observable("output_control"),
