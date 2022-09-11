@@ -43,6 +43,12 @@ $(function () {
       });
     });
 
+    self.settings_fanspeed_sensors = ko.pureComputed(function () {
+      return ko.utils.arrayFilter(self.settings_temperature_sensors(), function (sensor) {
+        return (self.FanspeedCapableSensor(sensor.temp_sensor_type()));
+      });
+    });
+
     self.use_sudo = ko.observable();
     self.gcode_control = ko.observable();
     self.neopixel_dma = ko.observable();
