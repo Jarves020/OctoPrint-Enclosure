@@ -657,14 +657,14 @@ $(function () {
             item.new_duty_cycle("");
             item.duty_cycle(pwm_value);
             self.getUpdateUI();
-          }
-/*           error: function(data) {
+          },
+          error: function(data) {
               new PNotify({
               title: "Enclosure EMC",
               text: "Setting Duty Cycle over UI failed!",
               type: "error"
               });
-          } */
+          }
         });
       }
     };
