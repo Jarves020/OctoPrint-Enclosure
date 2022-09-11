@@ -12,12 +12,12 @@
                 <!-- ko if: ($root.hasAnySensorWithHumidity())  -->
                 <th class="humidity_actual" title="{{ _('Current humidity') }}">{{ _('Humidity') }}</th>
                 <!-- /ko -->
+                <!-- ko if: ($root.hasAnyFanspeed())  -->
+                <th class="fanspeed" title="{{ _('Fanspeed RPM') }}">{{ _('RPM') }}</th>
+                <!-- /ko -->
                 <!-- ko if: ($root.hasAnyTemperatureControl())  -->
                 <th class="temp_hum_control">{{ _('Control') }}</th>
                 <th class="temperature_target" title="{{ _('Current target temperature') }}">{{ _('Target') }}</th>
-                <!-- /ko -->
-                <!-- ko if: ($root.hasAnyFanspeed())  -->
-                <th class="fanspeed" title="{{ _('Fanspeed RPM') }}">{{ _('RPM') }}</th>
                 <!-- /ko -->
             </tr>
 
@@ -46,12 +46,10 @@
                 <!-- /ko -->
                 <!-- /ko -->
 
-
-
                 <!-- ko if: ($root.FanspeedCapableSensor(temp_sensor_type()))  -->
                 <td class="fanspeed" data-bind="attr: {rowspan: $root.calculateRowSpan(index_id)}">
                     <span data-bind="text: temp_sensor_rpm, attr: {title: temp_sensor_rpm}"> </span>
-                    <span class="add-on">%</span>
+                    <span class="add-on">RpM</span>
                 </td>
                 <!-- /ko -->
 
@@ -60,11 +58,6 @@
                 <td class="fanspeed" data-bind="attr: {rowspan: $root.calculateRowSpan(index_id)}">N/A</td>
                 <!-- /ko -->
                 <!-- /ko -->
-
-
-
-
-
 
                 <!-- ko if: ($root.linkedTemperatureControl(index_id())().length > 0 || $root.hasAnyTemperatureControl())  -->
                 <!-- ko with:  $root.linkedTemperatureControl(index_id())()[0] -->
