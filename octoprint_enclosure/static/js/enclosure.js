@@ -646,17 +646,24 @@ $(function () {
           type: "error"
         });
       } else {
-        var request = { duty_cycle: pwm_value };
+        var request = { "duty_cycle:" pwm_value };
         $.ajax({
           type: "PATCH",
           dataType: "json",
+          contentType: "application/json; charset=UTF-8",
           data: request,
           url: self.buildPluginUrl("/emc/" + item.index_id()),
           success: function (data) {
             item.new_duty_cycle("");
             item.duty_cycle(pwm_value);
             self.getUpdateUI();
-          }
+          },
+          error: function() {
+              new PNotify({
+              title: "Enclosure",
+              text: "Setting Duty Cycle over UI failed!",
+              type: "error"
+        });
         });
       }
     };
