@@ -46,6 +46,7 @@ Response (200):
     "input_pull_resistor": string,
     "input_type": string,
     "temp_sensor_temp": number,
+    "temp_sensor_rpm": number,
     "label": string,
     "index_id": number,
     "use_fahrenheit": boolean,
