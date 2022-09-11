@@ -646,12 +646,12 @@ $(function () {
           type: "error"
         });
       } else {
-        var request = { "duty_cycle": pwm_value };
+        var request = {duty_cycle: pwm_value};
         $.ajax({
           type: "PATCH",
           dataType: "json",
           contentType: "application/json; charset=UTF-8",
-          data: request,
+          data: JSON.stringify(request),
           url: self.buildPluginUrl("/emc/" + item.index_id()),
           success: function (data) {
             item.new_duty_cycle("");
