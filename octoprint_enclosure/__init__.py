@@ -461,18 +461,18 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
     @restricted_access
     def set_emc2101(self, identifier):
         if "application/json" not in request.headers["Content-Type"]:
-			self._logger.debug("Set_EMC2101 Error: expected json")
+            self._logger.debug("Set_EMC2101 Error: expected json")
             return make_response("expected json", 400)
         try:
             data = request.json
         except BadRequest:
-			self._logger.debug("Set_EMC2101 Error: malformed request")
+            self._logger.debug("Set_EMC2101 Error: malformed request")
             return make_response("malformed request", 400)
         if 'duty_cycle' not in data:
-			self._logger.debug("Set_EMC2101 Error: missing duty_cycle attribute")
+            self._logger.debug("Set_EMC2101 Error: missing duty_cycle attribute")
             return make_response("missing duty_cycle attribute", 406)
         set_value = self.to_int(data['duty_cycle'])
-		self._logger.debug("Writing PWM from UI on EMC2101: value %s", set_value)
+        self._logger.debug("Writing PWM from UI on EMC2101: value %s", set_value)
         script = os.path.dirname(os.path.realpath(__file__)) + "/SETEMC2101.py"
         cmd = [sys.executable, script, str(set_value)]
         if self._settings.get(["use_sudo"]):
