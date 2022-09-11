@@ -641,7 +641,7 @@ $(function () {
       if (pwm_value < 0 || pwm_value > 100 || isNaN(pwm_value)) {
         item.new_duty_cycle("")
         new PNotify({
-          title: "Enclosure",
+          title: "Enclosure EMC",
           text: "Duty Cycle value needs to be between 0 and 100!",
           type: "error"
         });
@@ -658,9 +658,9 @@ $(function () {
             item.duty_cycle(pwm_value);
             self.getUpdateUI();
           },
-          error: function() {
+          error: function(data) {
               new PNotify({
-              title: "Enclosure",
+              title: "Enclosure EMC",
               text: "Setting Duty Cycle over UI failed!",
               type: "error"
               });
