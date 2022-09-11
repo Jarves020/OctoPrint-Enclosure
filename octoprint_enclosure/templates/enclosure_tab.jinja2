@@ -193,8 +193,7 @@
 </div>
 <!-- /ko -->
 
-<!-- ko if: ($data.output_type() == "pwm")  -->
-<!-- ko if: ($data.output_type() == "emc")  -->
+<!-- ko if: ($data.output_type() == "pwm" || $data.output_type() == "emc")  -->
 <h4>
     <span data-bind="html: label"> </span>
     <span class="badge">pwm</span>
@@ -212,7 +211,6 @@
     </button>
     <!-- /ko -->
 </div>
-<!-- /ko -->
 <!-- /ko -->
 
 <!-- ko if: ($data.output_type() == "neopixel_direct" || $data.output_type() == "neopixel_indirect")  -->
