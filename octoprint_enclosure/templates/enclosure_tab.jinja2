@@ -194,6 +194,7 @@
 <!-- /ko -->
 
 <!-- ko if: ($data.output_type() == "pwm")  -->
+<!-- ko if: ($data.output_type() == "emc")  -->
 <h4>
     <span data-bind="html: label"> </span>
     <span class="badge">pwm</span>
@@ -288,7 +289,7 @@
 <!-- /ko -->
 <!-- /ko -->
 
-<!-- ko if: (($data.output_type() == "regular" || $data.output_type() == "pwm") &&  $data.toggle_timer()) -->
+<!-- ko if: (($data.output_type() == "regular" || $data.output_type() == "pwm" || $data.output_type() == "emc") &&  $data.toggle_timer()) -->
 <h5>
     <span>Time Toggle</span>
     <span class="badge"> active</span>
