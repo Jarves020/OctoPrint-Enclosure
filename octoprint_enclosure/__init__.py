@@ -864,6 +864,8 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
                     sensor["temp_sensor_rpm"] = rpm
                     sensor_data.append(dict(index_id=sensor['index_id'], temperature=temp, humidity=hum, airquality=airquality, fanspeed=rpm))
                     self.temperature_sensor_data = sensor_data
+                    self._logger.debug("sensor: ", sensor)
+                    self._logger.debug("sensor: ", sensor_data)
                     self.handle_temp_hum_control()
                     self.handle_temperature_events()
                     self.handle_pwm_linked_temperature()
