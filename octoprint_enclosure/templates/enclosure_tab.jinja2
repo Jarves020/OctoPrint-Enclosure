@@ -46,19 +46,6 @@
                 <!-- /ko -->
                 <!-- /ko -->
 
-                <!-- ko if: ($root.FanspeedCapableSensor(temp_sensor_type()))  -->
-                <td class="fanspeed" data-bind="attr: {rowspan: $root.calculateRowSpan(index_id)}">
-                    <span data-bind="text: temp_sensor_rpm, attr: {title: temp_sensor_rpm}"> </span>
-                    <span class="add-on">RpM</span>
-                </td>
-                <!-- /ko -->
-
-                <!-- ko if: ($root.hasAnyFanspeed())  -->
-                <!-- ko ifnot: ($root.FanspeedCapableSensor(temp_sensor_type()))  -->
-                <td class="fanspeed" data-bind="attr: {rowspan: $root.calculateRowSpan(index_id)}">N/A</td>
-                <!-- /ko -->
-                <!-- /ko -->
-
                 <!-- ko if: ($root.linkedTemperatureControl(index_id())().length > 0 || $root.hasAnyTemperatureControl())  -->
                 <!-- ko with:  $root.linkedTemperatureControl(index_id())()[0] -->
                 <th class="temp_hum_control" data-bind="html: label, attr: {title: label}"></th>
