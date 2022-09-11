@@ -663,7 +663,8 @@ $(function () {
               title: "Enclosure",
               text: "Setting Duty Cycle over UI failed!",
               type: "error"
-        });
+              });
+          }
         });
       }
     };
