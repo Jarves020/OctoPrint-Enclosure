@@ -1437,19 +1437,19 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
                     calculated_duty = self.to_int(pwm_output['default_duty_cycle'])
                 else:
                     calculated_duty = self.to_int(pwm_output['default_duty_cycle'])
-            script = os.path.dirname(os.path.realpath(__file__)) + "/SETEMC2101.py"
-            cmd = [sys.executable, script, str(int(calculated_duty))]
-            if self._settings.get(["use_sudo"]):
-                cmd.insert(0, "sudo")
-            self._logger.info("Calculated fan speed is ", calculated_duty)
-            stdout = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-            output, errors = stdout.communicate()
-            if self._settings.get(["debug_temperature_log"]) is True:
-                if len(errors) > 0:
-                    self._logger.error("EMC2101 error: %s", errors)
-                else:
-                    self._logger.debug("EMC2101 result: %s", output)
-            self._logger.debug(output + " " + errors)
+                script = os.path.dirname(os.path.realpath(__file__)) + "/SETEMC2101.py"
+                cmd = [sys.executable, script, str(int(calculated_duty))]
+                if self._settings.get(["use_sudo"]):
+                    cmd.insert(0, "sudo")
+                self._logger.info("Calculated fan speed is ", calculated_duty)
+                stdout = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+                output, errors = stdout.communicate()
+                if self._settings.get(["debug_temperature_log"]) is True:
+                    if len(errors) > 0:
+                        self._logger.error("EMC2101 error: %s", errors)
+                    else:
+                        self._logger.debug("EMC2101 result: %s", output)
+                self._logger.debug(output + " " + errors)
 
 
         except Exception as ex:
