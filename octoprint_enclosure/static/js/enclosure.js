@@ -62,6 +62,13 @@ $(function () {
       return false;
     };
 
+    self.FanspeedCapableSensor = function(sensor){
+      if (['emc2101'].indexOf(sensor) >= 0){
+        return true;
+      }
+      return false;
+    };
+
     self.isRegularOutput = function(index_id){
       return_value = false;
       if (typeof index_id != 'undefined'){
@@ -133,6 +140,17 @@ $(function () {
           return false;
         } 
       });
+      return return_value;
+    };
+
+    self.hasAnyFanspeed = function(){
+      return_value = false;
+      self.rpi_inputs_temperature_sensors().forEach(function (sensor) {
+        if (self.FanspeedCapableSensor(sensor.temp_sensor_type())) {
+          return_value = true;
+          return false;
+        }
+      });      
       return return_value;
     };
 
@@ -454,6 +472,7 @@ $(function () {
         temp_sensor_address: ko.observable(""),
         temp_sensor_temp: ko.observable(""),
         temp_sensor_humidity: ko.observable(""),
+        temp_sensor_rpm: ko.observable(""),
         ds18b20_serial: ko.observable(""),
         use_fahrenheit: ko.observable(false),
         action_type: ko.observable("output_control"),

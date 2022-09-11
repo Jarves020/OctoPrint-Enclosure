@@ -41,6 +41,11 @@
     overflow: visible;
 }
 
+#enclosure-table th.fanspeed,
+#enclosure-table td.fanspeed {
+    width: 15%;
+}
+
 .glyphs-on {
     color: blue;
     text-shadow: 4px 4px 15px blue;
