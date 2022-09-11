@@ -646,7 +646,7 @@ $(function () {
           type: "error"
         });
       } else {
-        var request = { duty_cycle: pwm_value };
+        var request = { "duty_cycle": pwm_value };
         $.ajax({
           type: "PATCH",
           dataType: "json",
