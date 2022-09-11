@@ -30,6 +30,14 @@
         </a>
     </li>
     <!-- /ko -->
+    <!-- ko if: ($root.FanspeedCapableSensor(temp_sensor_type()))  -->
+    <li>
+        <a href="javascript:void(0)">
+            <span data-bind="text: temp_sensor_rpm, attr: {title: temp_sensor_rpm}"> </span>
+            <span class="add-on">%</span>
+        </a>
+    </li>
+    <!-- /ko -->
     <!-- /ko -->
 </ul>
 <!-- /ko -->
