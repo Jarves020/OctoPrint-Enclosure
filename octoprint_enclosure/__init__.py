@@ -1431,7 +1431,7 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
 
     def handle_emc_linked_temperature(self):
         try:
-            for pwm_output in list(filter(lambda item: item['output_type'] == 'emc',
+            for pwm_output in list(filter(lambda item: item['output_type'] == 'emc' and item['pwm_temperature_linked'],
                                           self.rpi_outputs)):
                 if self._printer.is_printing():
                     index_id = self.to_int(pwm_output['index_id'])
