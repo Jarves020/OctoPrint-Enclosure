@@ -461,13 +461,13 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
     @restricted_access
     def set_emc2101(self, identifier):
         if "application/json" not in request.headers["Content-Type"]:
-            return make_response("expected json", 400)
+            return make_response("API expected json", 400)
         try:
             data = request.json
         except BadRequest:
-            return make_response("malformed request", 400)
+            return make_response("API malformed request", 400)
         if 'duty_cycle' not in data:
-            return make_response("missing duty_cycle attribute", 406)
+            return make_response("API missing duty_cycle attribute", 406)
         set_value = self.to_int(data['duty_cycle'])
         script = os.path.dirname(os.path.realpath(__file__)) + "/SETEMC2101.py"
         cmd = [sys.executable, script, str(set_value)]
@@ -477,10 +477,11 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
         output, errors = stdout.communicate()
         if self._settings.get(["debug_temperature_log"]) is True:
             if len(errors) > 0:
-                self._logger.error("EMC2101 error: %s", errors)
+                self._logger.error("EMC2101 API error: %s", errors)
             else:
-                self._logger.debug("EMC2101 result: %s", output)
+                self._logger.debug("EMC2101 API result: %s", output)
         self._logger.debug(output + " " + errors)
+        self._logger.debug("EMC2101 API Call; Dutycycle: %s", set_value)
         return make_response('', 204)
 
     
@@ -858,15 +859,16 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
                     sensor["temp_sensor_temp"] = temp
                     sensor["temp_sensor_humidity"] = hum
                     sensor_data.append(dict(index_id=sensor['index_id'], temperature=temp, humidity=hum, airquality=airquality))
-                    self.temperature_sensor_data = sensor_data
-                    self.handle_temp_hum_control()
-                    self.handle_temperature_events()
-                    self.handle_pwm_linked_temperature()
-                    self.handle_emc_linked_temperature()
-                    self.update_ui()
                     self.mqtt_sensor_topic = self.mqtt_root_topic + "/" + sensor['label']
                     self.mqtt_message = {"temperature":  temp, "humidity": hum}
                     self.mqtt_publish(self.mqtt_sensor_topic, self.mqtt_message)
+
+            self.temperature_sensor_data = sensor_data
+            self.handle_temp_hum_control()
+            self.handle_temperature_events()
+            self.handle_pwm_linked_temperature()
+            self.handle_emc_linked_temperature()
+            self.update_ui()
         except Exception as ex:
             self.log_error(ex)
 
@@ -1297,7 +1299,7 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
                 if len(errors) > 0:
                     self._logger.error("EMC2101 error: %s", errors)
                 else:
-                    self._logger.debug("EMC2101 result: %s", output)
+                    self._logger.debug("Read EMC2101 result: %s", output)
             temp, fanspeed = output.split("|")
             print (temp + " , " + fanspeed )
             return (self.to_float(temp.strip()), 0.0 )
@@ -1431,8 +1433,7 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
 
     def handle_emc_linked_temperature(self):
         try:
-            for pwm_output in list(filter(lambda item: item['output_type'] == 'emc',
-                                          self.rpi_outputs)):
+            for pwm_output in list(filter(lambda item: item['output_type'] == 'emc' and item['pwm_temperature_linked'], self.rpi_outputs)):
                 if self._printer.is_printing():
                     index_id = self.to_int(pwm_output['index_id'])
                     linked_id = self.to_int(pwm_output['linked_temp_sensor'])
@@ -1457,24 +1458,28 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
                     calculated_duty = self.to_int(pwm_output['default_duty_cycle'])
                 else:
                     calculated_duty = self.to_int(pwm_output['default_duty_cycle'])
-            script = os.path.dirname(os.path.realpath(__file__)) + "/SETEMC2101.py"
-            cmd = [sys.executable, script, str(int(calculated_duty))]
-            if self._settings.get(["use_sudo"]):
-                cmd.insert(0, "sudo")
-            self._logger.info("Calculated fan speed is ", calculated_duty)
-            stdout = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-            output, errors = stdout.communicate()
-            if self._settings.get(["debug_temperature_log"]) is True:
-                if len(errors) > 0:
-                    self._logger.error("EMC2101 error: %s", errors)
+
+                script = os.path.dirname(os.path.realpath(__file__)) + "/SETEMC2101.py"
+                cmd = [sys.executable, script, str(int(calculated_duty))]
+                self._logger.debug("EMC2101 LinkedTemp Call")
+
+                if self._settings.get(["use_sudo"]):
+                    cmd.insert(0, "sudo")
+
+                self._logger.info("EMC2101 linked Temperature Calculated fan speed is ", calculated_duty)
+                stdout = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+                output, errors = stdout.communicate()
+                
+                if self._settings.get(["debug_temperature_log"]) is True:
+                    if len(errors) > 0:
+                     self._logger.error("EMC2101 linked Temperature error: %s", errors)
                 else:
-                    self._logger.debug("EMC2101 result: %s", output)
-            self._logger.debug(output + " " + errors)
+                    self._logger.debug("EMC2101 linked Temperature result: %s", output)
+                self._logger.debug(output + " " + errors)
         
 
         except Exception as ex:
             self.log_error(ex)
-
 
     def handle_pwm_linked_temperature(self):
         try:
@@ -1529,6 +1534,8 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
                 max_temp = self.to_float(temp_hum_control['temp_ctr_max_temp'])
 
                 linked_id = temp_hum_control['linked_temp_sensor']
+                self._logger.debug("linked_id: %s", linked_id)
+                self._logger.debug("Tempsensor Data: %s", self.temperature_sensor_data)
 
                 previous_status = list(filter(lambda item: item['index_id'] == temp_hum_control['index_id'],
                     self.temp_hum_control_status)).pop()['status']

@@ -1,23 +1,25 @@
 import sys
+import time
 import board
-from adafruit_emc2101.emc2101_lut import EMC2101_LUT as EMC2101
+import adafruit_emc2101
 
+# Create I2C bus as normal
 i2c = board.I2C()  # uses board.SCL and board.SDA
-FAN_MAX_RPM = 1700
-emc = EMC2101(i2c)
 
-
- 
-
-def main():
-	# total arguments
-	n = len(sys.argv)
-	if n != 2:
-		print("No_duty_cycle_specified")
-		sys.exit(2) 
-
+if len(sys.argv) == 2:
 	dutyCycle=int(sys.argv[1])
-	emc.manual_fan_speed = dutyCycle
+else:
+	print('-1')
+	sys.exit(1)
 
-if __name__ == "__main__":
-	main()
+try:
+	emc = adafruit_emc2101.EMC2101(i2c)
+	
+	emc.manual_fan_speed = dutyCycle
+	temperature = emc.internal_temperature
+	fanspeed = emc.fan_speed
+except:
+	fanspeed=0
+	temperature=0
+
+print('{0:0.1f} | {1:0.1f}'.format(temperature, fanspeed))
